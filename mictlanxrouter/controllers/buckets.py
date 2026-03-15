@@ -1318,6 +1318,7 @@ class BucketsController():
                 "bucket_id":bucket_id,
                 "key":ball_id,
                 "force":force,
+                "content_type":media,
                 "response_time": end_time- start_time 
             })
             if attachment:
@@ -1461,6 +1462,7 @@ class BucketsController():
                         "local_peer_id":_local_peer_id,
                         "hit":int(_local_peer_id==_peer_id),
                         "force":force,
+                        "content_type":media_type,
                         "response_time":end_at- start_time 
                     })
                     response  = StreamingResponse(content=cg, media_type=media_type,background=background_task)
