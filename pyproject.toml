@@ -31,11 +31,11 @@ lmdb = "^1.6.2"
 gunicorn = "^23.0.0"
 tenacity = "^9.1.2"
 pydantic = "^2.11.7"
-mictlanxrm = "0.1.0a4"
 mictlanx = "0.1.0a2"
 setuptools = "^82.0.0"
 pyinstrument = "^5.1.2"
 memray = "^1.19.1"
+mictlanxrm = "0.1.0a5"
 
 
 [tool.poetry.group.dev.dependencies]
