@@ -6,3 +6,6 @@ xolo-api.yml
 *.pem
 .coverage
 .pytest_cache/
+.env.prod
+sync-prod-envs.sh
+*.env.prod
