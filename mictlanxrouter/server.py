@@ -183,7 +183,7 @@ buckets_controller = Cx.BucketsController(log = L,tracer=tracer,cache = cache)
 cache_controller   = Cx.CacheController(log = L, cache =cache,tracer=tracer)
 
 app = FastAPI(
-    root_path = os.environ.get("OPENAPI_PREFIX","/mictlanx"),
+    root_path = os.environ.get("MICTLANX_ROUTER_OPENAPI_PREFIX","/mictlanx"),
     lifespan  = lifespan
     
 )
@@ -194,7 +194,7 @@ Instrumentator().instrument(app).expose(app)
 app.add_middleware(
     CORSMiddleware,
     allow_origins     = [config.MICTLANX_CORS_ALLOW_ORIGINS],
-    allow_credentials = config.MICTLANX_CORS_ALLOW_CREDENTILAS,
+    allow_credentials = config.MICTLANX_CORS_ALLOW_CREDENTIALS,
     allow_methods     = [config.MICTLANX_CORS_ALLOW_METHODS],
     allow_headers     = [config.MICTLANX_CORS_ALLOW_HEADERS]
 )

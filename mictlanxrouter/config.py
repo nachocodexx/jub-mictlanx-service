@@ -20,7 +20,9 @@ from option import Some
 # ============================================================
 # ENV_FILE_PATH allows selecting dynamically which .env file to load
 # (for example: .env.local, .env.dev, .env.prod, etc.).
-ENV_FILE_PATH = os.environ.get("ENV_FILE_PATH", ".env.local")
+ENV_FILE_PATH = os.environ.get("MICTLANX_ROUTER_ENV_FILE_PATH", ".env.local")
+print(f"Loading environment variables from: {ENV_FILE_PATH} - [{'Found' if os.path.exists(ENV_FILE_PATH) else 'Not Found'}]")
+
 if os.path.exists(ENV_FILE_PATH):
     load_dotenv(ENV_FILE_PATH)
 
@@ -60,7 +62,7 @@ MICTLANX_TEST = _get_bool("MICTLANX_TEST", "0")
 # Flag to enable debug mode (more logs, console span exporter, etc.).
 MICTLANX_ROUTER_DEBUG = _get_bool("MICTLANX_ROUTER_DEBUG", "0")
 # Base directory where log files will be stored.
-MICTLANX_ROUTER_LOG_PATH = os.environ.get("MICTLANX_ROUTER_LOG_PATH", "/mictlanx/router")
+MICTLANX_ROUTER_LOG_PATH = os.environ.get("MICTLANX_ROUTER_LOG_PATH", "/log")
 # Base name of the router logger (used in the JSON logger).
 MICTLANX_ROUTER_LOG_NAME = os.environ.get("MICTLANX_ROUTER_LOG_NAME", "mictlanx-router-0")
 # Log rotation interval (number of units defined by WHEN).
@@ -148,8 +150,8 @@ MICTLANX_ROUTER_MAX_CONCURRENCY = _get_int(
 MICTLANX_ROUTER_MAX_PEERS_RF = _get_int("MICTLANX_ROUTER_MAX_PEERS_RF", "5")
 # Logical network identifier for MictlanX (useful to isolate multiple networks).
 MICTLANX_ROUTER_NETWORK_ID = os.environ.get("MICTLANX_ROUTER_NETWORK_ID", "mictlanx")
-# Protocol used by peers (http, https, etc.). Note: original env var name has a typo MICTLANX_PROCOTOL.
-MICTLANX_PROTOCOL = os.environ.get("MICTLANX_PROCOTOL", "http")
+# Protocol used by peers (http, https, etc.).
+MICTLANX_PROTOCOL = os.environ.get("MICTLANX_PROTOCOL", "http")
 # API version exposed by the router.
 MICTLANX_API_VERSION = os.environ.get("MICTLANX_API_VERSION", "4")
 # URI of known (seed) peers for the router, format like:
@@ -200,8 +202,8 @@ MICTLANX_SUMMONER_SUBNET = os.environ.get(
 # Allowed origins for CORS (can be '*' or a comma-separated list).
 MICTLANX_CORS_ALLOW_ORIGINS = os.environ.get("MICTLANX_CORS_ALLOW_ORIGINS", "*")
 # Whether to allow sending credentials (cookies, auth headers) in CORS.
-MICTLANX_CORS_ALLOW_CREDENTILAS = _get_bool(
-    "MICTLANX_CORS_ALLOW_CREDENTILAS",
+MICTLANX_CORS_ALLOW_CREDENTIALS = _get_bool(
+    "MICTLANX_CORS_ALLOW_CREDENTIALS",
     "1"
 )
 # Allowed HTTP methods for CORS (e.g., '*', 'GET,POST,PUT').
@@ -236,7 +238,7 @@ MICTLANX_OPEN_API_DESCRIPTION = os.environ.get(
 MICTLANX_OPEN_API_LOGO = os.environ.get("MICTLANX_OPEN_API_LOGO", "")
 # FastAPI root_path, used when mounting the service behind a reverse proxy
 # (for example: /mictlanx if the router is published as a subpath).
-MICTLANX_OPENAPI_ROOT_PATH = os.environ.get("OPENAPI_PREFIX", "/mictlanx")
+MICTLANX_OPENAPI_ROOT_PATH = os.environ.get("MICTLANX_ROUTER_OPENAPI_ROOT_PATH", "/mictlanx")
 
 # ==============================
 # OpenTelemetry
