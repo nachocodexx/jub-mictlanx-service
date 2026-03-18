@@ -1,0 +1,92 @@
+services:
+  mictlanx-router-0:
+    image: ${MICTLANX_ROUTER_DOCKER_IMAGE-nachocode/mictlanx:router-0.1.0a5}
+    env_file:
+      - .env.dev
+    command: gunicorn mictlanxrouter.server:app --worker-class uvicorn.workers.UvicornWorker --bind ${MICTLANX_ROUTER_HOST-0.0.0.0}:${MICTLANX_ROUTER_PORT-60666} --workers ${MICTLANX_ROUTER_WORKERS-1} --capture-output
+    ports:
+      - ${MICTLANX_ROUTER_LOCAL_PORT-60666}:${MICTLANX_ROUTER_PORT-60666}
+    volumes:
+      # - mictlanx-router-0_logs:${MICTLANX_ROUTER_LOG_PATH-/log}
+      - ${MICTLANX_ROUTER_LOG_LOCAL_PATH-mictlanx-router-0_logs}:${MICTLANX_ROUTER_LOG_PATH-/app/log}
+      - ${MICTLANX_ROUTER_ENV_FILE_LOCAL_PATH-./.env.dev}:${MICTLANX_ROUTER_ENV_FILE_PATH-/app/.env.dev}
+    networks:
+      - mictlanx
+    
+  mictlanx-rm-0:
+    image: ${MICTLANX_RM_IMAGE-nachocode/mictlanx:rm-0.1.0a5}
+    env_file:
+      - ${MICTLANX_RM_ENV_FILE_LOCAL_PATH-./.mictlanxrm.env.dev}
+    volumes:
+      - type: ${MICTLANX_RM_LOG_VOLUME_TYPE-volume}
+        source: ${MICTLANX_RM_LOG_LOCAL_PATH-mictlanx-rm-0_logs}
+        target: ${MICTLANX_RM_LOG_PATH-/app/log}
+      
+      - type: ${MICTLANX_RM_DATA_VOLUME_TYPE-volume}
+        source: ${MICTLANX_RM_DATA_LOCAL_PATH-mictlanx-rm-0_data}
+        target: ${MICTLANX_RM_DATA_PATH-/app/data/x.json}
+      
+      - type: ${MICTLANX_RM_PEERS_FILE_VOLUME_TYPE-bind}
+        source: ${MICTLANX_RM_PEERS_FILE_LOCAL_PATH-./peers.dev.json}
+        target: ${MICTLANX_RM_PEERS_FILE_PATH-/app/peers.json}
+
+      - type: ${MICTLANX_RM_ENV_FILE_VOLUME_TYPE-bind}
+        source: ${MICTLANX_RM_ENV_FILE_LOCAL_PATH-./.mictlanxrm.env.dev}
+        target: ${MICTLANX_RM_ENV_FILE_PATH-/app/.env.dev}
+
+    networks:
+      - mictlanx
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: "8G"
+        reservations:
+          cpus: '1'
+          memory: "2G"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
+      placement:
+        constraints:
+          - node.labels.index==9
+
+  mictlanx-summoner-0:
+    image: ${MICTLANX_SUMMONER_DOCKER_IMAGE-nachocode/mictlanx:summoner-0.1.0a5}
+    env_file:
+      - .summoner.env.dev
+    privileged: true
+    ports:
+      - ${MICTLANX_RM_SUMMONER_LOCAL_PORT-17000}:${MICTLANX_RM_SUMMONER_PORT-15000}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - mictlanx-summoner-0_log:/app/log
+      - mictlanx-summoner-0_data:/app/data
+    networks:
+      - mictlanx
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: "16G"
+        reservations:
+          cpus: '1'
+          memory: "8G"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
+      placement:
+        constraints:
+          - node.labels.index==1
+  
+networks:
+  mictlanx:
+    external: true
+volumes:
+  mictlanx-router-0_logs:
+  mictlanx-rm-0_logs:
+  mictlanx-summoner-0_log:
+  mictlanx-summoner-0_data:
+  mictlanx-rm-0_data:

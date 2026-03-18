@@ -1,22 +1,33 @@
 #!/bin/bash
 
 readonly ENV_FILE=${1:-".env.dev"}
+readonly PORT=${2:-"60666"}
 echo "Creating [mictlanx] network..."
 
 docker network create --driver=bridge mictlanx || true
 
 echo "Removing existing routers"
-docker compose --env-file $ENV_FILE -f mictlanx-router.yml down
+docker compose --env-file $ENV_FILE -f docker-compose.yml down
 
 echo "Starting a new MictlanX Cluster "
-docker compose --env-file $ENV_FILE -f mictlanx-router.yml up -d
+docker compose --env-file .mictlanxrm${ENV_FILE} --env-file $ENV_FILE -f docker-compose.yml up -d
+# Check if jq is installed
+if ! command -v jq &> /dev/null; then
+    echo "Error: 'jq' is required but not installed. Please install 'jq' to run this script."
+    echo "You can install 'jq' using your package manager. For example:"
+    echo "  - On Debian/Ubuntu: sudo apt-get install jq"
+    echo "  - On macOS with Homebrew: brew install jq"
+    exit 1
+fi
 # -------------------------------
 # Healthcheck: wait for peers
 # -------------------------------
-API="http://localhost:60666/api/v4/peers/stats"
+API="http://localhost:$PORT/api/v4/peers/stats"
 DEADLINE=$((SECONDS + 180))   # timeout after 180s; adjust as needed
 
 echo "Waiting for peers to appear at $API ..."
+
+
 
 while true; do
   # fetch JSON (fail on non-2xx; quiet errors to stderr)

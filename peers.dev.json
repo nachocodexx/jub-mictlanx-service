@@ -1,0 +1,111 @@
+{
+    "mictlanx-peer-0": {
+        "container_id": "mictlanx-peer-0",
+        "image": "nachocode/mictlanx:peer-0.1.0a2",
+        "hostname": "mictlanx-jub-peer-0",
+        "exposed_ports": [
+        {
+            "host_port": 24000,
+            "container_port": 24000
+        }
+        ],
+        "envs": {
+        "USER_ID": "6666",
+        "GROUP_ID": "6666",
+        "BIN_NAME": "peer",
+        "NODE_ID": "mictlanx-peer-0",
+        "NODE_PORT": "24000",
+        "IP_ADDRESS": "mictlanx-peer-0",
+        "SERVER_IP_ADDR": "0.0.0.0",
+        "NODE_DISK_CAPACITY": "1000000000000",
+        "NODE_MEMORY_CAPACITY": "4294967296",
+        "BASE_PATH": "/app/mictlanx",
+        "LOCAL_PATH": "/app/mictlanx/local",
+        "DATA_PATH": "/app/mictlanx/data",
+        "LOG_PATH": "/app/mictlanx/log",
+        "MIN_INTERVAL_TIME": "5",
+        "MAX_INTERVAL_TIME": "20",
+        "WORKERS": "4",
+        "ELASTIC": "true",
+        "MAX_IDLE_TIME": "70"
+        },
+        "memory": 4294967296,
+        "cpu_count": "2",
+        "mounts": [
+        {
+            "source": "mictlanx-peer-0_log",
+            "target": "/app/mictlanx/log",
+            "mount_type": 1
+        },
+        {
+            "source": "mictlanx-peer-0_local",
+            "target": "/app/mictlanx/local",
+            "mount_type": 1
+        },
+        {
+            "source": "mictlanx-peer-0_data",
+            "target": "/app/mictlanx/data",
+            "mount_type": 1
+        }
+        ],
+        "network_id": "mictlanx",
+        "selected_node": "11",
+        "force": true,
+        "labels":{}
+    },
+    "mictlanx-peer-1": {
+        "container_id": "mictlanx-peer-1",
+        "image": "nachocode/mictlanx:peer-0.1.0a2",
+        "hostname": "mictlanx-peer-1",
+        "exposed_ports": [
+        {
+            "host_port": 24001,
+            "container_port": 24001
+        }
+        ],
+        "envs": {
+            "USER_ID": "6666",
+            "GROUP_ID": "6666",
+            "BIN_NAME": "peer",
+            "NODE_ID": "mictlanx-peer-1",
+            "NODE_PORT": "24001",
+            "IP_ADDRESS": "mictlanx-peer-1",
+            "SERVER_IP_ADDR": "0.0.0.0",
+            "NODE_DISK_CAPACITY": "1000000000000",
+            "NODE_MEMORY_CAPACITY": "4294967296",
+            "BASE_PATH": "/app/mictlanx",
+            "LOCAL_PATH": "/app/mictlanx/local",
+            "DATA_PATH": "/app/mictlanx/data",
+            "LOG_PATH": "/app/mictlanx/log",
+            "MIN_INTERVAL_TIME": "5",
+            "MAX_INTERVAL_TIME": "20",
+            "WORKERS": "4",
+            "ELASTIC": "true",
+            "MAX_IDLE_TIME": "60"
+        },
+        "memory": 4000000000,
+        "cpu_count": "2",
+        "mounts": [
+            {
+                "source": "mictlanx-peer-1_log",
+                "target": "/app/mictlanx/log",
+                "mount_type": 1
+            },
+            {
+                "source": "mictlanx-peer-1_local",
+                "target": "/app/mictlanx/local",
+                "mount_type": 1
+            },
+            {
+                "source": "mictlanx-peer-1_data",
+                "target": "/app/mictlanx/data",
+                "mount_type": 1
+            }
+        ],
+        "network_id": "mictlanx",
+        "selected_node": "12",
+        "force": true,
+        "labels":{}
+    }
+
+}
