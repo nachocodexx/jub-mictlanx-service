@@ -1,7 +1,7 @@
 import os
 import asyncio
 import humanfriendly as HF
-from typing import Annotated,Union,List,Dict,Tuple,Iterator
+from typing import Annotated,Union,List,Dict,Tuple
 import time as T
 import aiofiles
 import itertools
@@ -33,7 +33,7 @@ from mictlanxrouter.decorators import disconnect_protected
 from tenacity import retry, stop_after_attempt, wait_fixed, RetryError
 from contextlib import contextmanager
 # 
-from opentelemetry.trace import Tracer,Status,StatusCode
+from opentelemetry.trace import Tracer
 
 
 class DependencyContainer:
@@ -230,7 +230,7 @@ class BucketsController():
                         "response_time":T.time() - start_time
                     })
                     return JSONResponse(content=jsonable_encoder(response))
-                except httpx._exceptions.HTTPError as e:
+                except httpx.HTTPError as e:
                     detail = str(e.response.content.decode("utf-8") )
                     # e.response.reason
                     status_code = e.response.status_code
@@ -240,7 +240,7 @@ class BucketsController():
                         "reason":e.response.reason,
                     })
                     raise HTTPException(status_code=status_code, detail=detail  )
-                except (httpx._exceptions.ConnectError, httpx._exceptions.ConnectTimeout) as e:
+                except (httpx.ConnectError, httpx.ConnectTimeout) as e:
                     detail = "Connection error - peers unavailable - {}".format(peer.peer_id)
                     self.log.error({
                         "detail":detail,
@@ -301,7 +301,7 @@ class BucketsController():
                 # METADATA_ACCESS_COUNTER.labels(bucket_id=bucket_id, key = key).inc()
 
                 return JSONResponse(content=jsonable_encoder(most_recent_metadata) )
-            except httpx._exceptions.HTTPError as e:
+            except httpx.HTTPError as e:
                 detail = str(e.response.content.decode("utf-8") )
                 status_code = e.response.status_code
                 self.log.error({
@@ -311,7 +311,7 @@ class BucketsController():
                     "reason":e.response.reason,
                 })
                 raise HTTPException(status_code=status_code, detail=detail  )
-            except (httpx._exceptions.ConnectError, httpx._exceptions.ConnectTimeout) as e:
+            except (httpx.ConnectError, httpx.ConnectTimeout) as e:
                 detail = "Connection error - peers unavailable - {}".format(peer.peer_id)
                 self.log.error({
                     "event":"CONNECTION.ERROR",
@@ -989,7 +989,7 @@ class BucketsController():
                 })
                 raise HTTPException(status_code=500, detail=str(e))
 
-            except httpx._exceptions.HTTPError as e:
+            except httpx.HTTPError as e:
                 detail = e.response.content.decode("utf-8")
                 self.log.error({
                     "event": "HTTP.ERROR",
@@ -999,7 +999,7 @@ class BucketsController():
                 })
                 raise HTTPException(status_code=e.response.status_code, detail=detail)
 
-            except (httpx._exceptions.ConnectError, httpx._exceptions.ConnectTimeout) as e:
+            except (httpx.ConnectError, httpx.ConnectTimeout) as e:
                 detail = f"Connection error - peers unavailable - {peer.peer_id}"
                 self.log.error({
                     "event": "CONNECTION.ERROR",
@@ -1109,7 +1109,7 @@ class BucketsController():
                     "status_code":e.status_code
                 })
                 raise HTTPException(status_code=500, detail = str(e))
-            except httpx._exceptions.HTTPError as e:
+            except httpx.HTTPError as e:
                 detail = str(e.response.content.decode("utf-8") )
                 # e.response.reason
                 status_code = e.response.status_code
@@ -1120,7 +1120,7 @@ class BucketsController():
                     "reason":e.response.reason,
                 })
                 raise HTTPException(status_code=status_code, detail=detail  )
-            except (httpx._exceptions.ConnectError, httpx._exceptions.ConnectTimeout) as e:
+            except (httpx.ConnectError, httpx.ConnectTimeout) as e:
                 detail = "Connection error - peers unavailable - {}".format(peer.peer_id)
                 self.log.error({
                     "event":"CONNECTION.ERROR",
@@ -1170,7 +1170,7 @@ class BucketsController():
                 })
                 return Response(content=None, status_code=204)
 
-            except httpx._exceptions.HTTPError as e:
+            except httpx.HTTPError as e:
                 detail = str(e.response.content.decode("utf-8") )
                 status_code = e.response.status_code
                 self.log.error({
@@ -1179,7 +1179,7 @@ class BucketsController():
                     "reason":e.response.reason,
                 })
                 raise HTTPException(status_code=status_code, detail=detail  )
-            except (httpx._exceptions.ConnectError, httpx._exceptions.ConnectTimeout) as e:
+            except (httpx.ConnectError, httpx.ConnectTimeout) as e:
                 detail = "Connection error - peers unavailable - {}".format(peer.peer_id)
                 self.log.error({
                     "detail":detail,
@@ -1484,7 +1484,7 @@ class BucketsController():
                     "status_code":e.status_code
                 })
                 raise HTTPException(status_code=e.status_code, detail = e.detail, headers=e.headers)
-            except httpx._exceptions.HTTPError as e:
+            except httpx.HTTPError as e:
                 detail = str(e.response.content.decode("utf-8") )
                 # e.response.reason
                 status_code = e.response.status_code
@@ -1495,7 +1495,7 @@ class BucketsController():
                     "reason":e.response.reason,
                 })
                 raise HTTPException(status_code=status_code, detail=detail  )
-            except (httpx._exceptions.ConnectError, httpx._exceptions.ConnectTimeout) as e:
+            except (httpx.ConnectError, httpx.ConnectTimeout) as e:
                 detail = "Connection error - peers unavailable - {}".format(peer.peer_id)
                 self.log.error({
                     "event":"CONNECTION.ERROR",
@@ -1587,7 +1587,7 @@ class BucketsController():
                 }
 
 
-            except httpx._exceptions.HTTPError as e:
+            except httpx.HTTPError as e:
                 detail = str(e.response.content.decode("utf-8") )
                 # e.response.reason
                 status_code = e.response.status_code
@@ -1597,7 +1597,7 @@ class BucketsController():
                     "reason":e.response.reason,
                 })
                 raise HTTPException(status_code=status_code, detail=detail  )
-            except (httpx._exceptions.ConnectError, httpx._exceptions.ConnectTimeout) as e:
+            except (httpx.ConnectError, httpx.ConnectTimeout) as e:
                 detail = "Connection error - peers unavailable - {}".format(peer.peer_id)
                 self.log.error({
                     "detail":detail,
@@ -1679,7 +1679,7 @@ class BucketsController():
                     })
                     
                     return JSONResponse(content=jsonable_encoder(default_delete_by_key_response.model_dump()))
-                except httpx._exceptions.HTTPError as e:
+                except httpx.HTTPError as e:
                         detail = str(e.response.content.decode("utf-8") )
                         status_code = e.response.status_code
                         self.log.error({
@@ -1688,7 +1688,7 @@ class BucketsController():
                             "reason":e.response.reason,
                         })
                         raise HTTPException(status_code=status_code, detail=detail  )
-                except (httpx._exceptions.ConnectError, httpx._exceptions.ConnectTimeout) as e:
+                except (httpx.ConnectError, httpx.ConnectTimeout) as e:
                     detail = "Connection error - peers unavailable - {}".format(peer.peer_id)
                     self.log.error({
                         "detail":detail,
@@ -1816,7 +1816,7 @@ class BucketsController():
                         "response_time":T.time() - _start_time,
                     })
                     return JSONResponse(content=jsonable_encoder(default_del_by_ball_id_response))
-                except httpx._exceptions.HTTPError as e:
+                except httpx.HTTPError as e:
                     detail = str(e.response.content.decode("utf-8") )
                     status_code = e.response.status_code
                     self.log.error({
@@ -1825,7 +1825,7 @@ class BucketsController():
                         "reason":e.response.reason,
                     })
                     raise HTTPException(status_code=status_code, detail=detail  )
-                except (httpx._exceptions.ConnectError, httpx._exceptions.ConnectTimeout) as e:
+                except (httpx.ConnectError, httpx.ConnectTimeout) as e:
                     detail = "Connection error - peers unavailable - {}".format(peer.peer_id)
                     self.log.error({
                         "detail":detail,
